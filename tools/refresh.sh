@@ -18,6 +18,7 @@
 #
 
 WD=`test -d ${0%/*} && cd ${0%/*}; pwd`
+CWD=`pwd`
 
 USAGE="USAGE: $0 [options] <board>:<config>+"
 ADVICE="Try '$0 --help' for more information"
@@ -151,6 +152,15 @@ for CONFIG in ${CONFIGS}; do
   fi
 
   BOARDDIR=boards/*/*/$BOARDSUBDIR
+  echo "${BOARDDIR}"
+  if [[ "$CONFIG" == .* ]] || [ ! -d $BOARDDIR ]; then
+    CONFIGSUBDIR=`basename ${CONFIG}`
+    BOARDDIR=$(dirname `dirname ${CONFIG}`)
+    if [ ! -d $BOARDDIR ]; then
+      BOARDDIR="${CWD}/${BOARDDIR}"
+    fi
+  fi
+
   SCRIPTSDIR=$BOARDDIR/scripts
   MAKEDEFS1=$SCRIPTSDIR/Make.defs
 
